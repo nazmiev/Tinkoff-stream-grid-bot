@@ -11,20 +11,21 @@ import os
 if os.path.isfile('token.txt'):
     with open(file='token.txt') as token_file:
          TOKEN = token_file.readline().rstrip('\n')
+         ACCID = token_file.readline().rstrip('\n')
 else:
     print ("No token.txt exists.")
     exit(0)
 
 #main file
 shares = {
-    "IRAO": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ""},
-    # "SBER": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ""},
-    # "T": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ""},
-    # "DSKY": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ""},
-    # "FIXP": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ""},
-    # "YNDX": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ""},
-    # "MTSS": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ""},
-    # "TCS": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ""},
+    "IRAO": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
+    # "SBER": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
+    # "T": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
+    # "DSKY": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
+    # "FIXP": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
+    # "YNDX": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
+    # "MTSS": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
+    # "TCS": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
 }
 
 sqlite = sqlite3.connect('sqlite_brand_new_stream2.db')

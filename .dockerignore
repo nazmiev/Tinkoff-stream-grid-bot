@@ -1,0 +1,9 @@
+# Временный для тестов
+.git
+LICENSE
+README.md
+__pycache__/
+.DS_Store
+token.txt
+*.db
+*.sh

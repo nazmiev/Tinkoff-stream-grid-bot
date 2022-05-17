@@ -18,7 +18,7 @@ else:
 
 #main file
 shares = {
-    "IRAO": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
+    "IRAO": {"number": 2, "price_step": 5 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
     # "SBER": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
     # "T": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
     # "DSKY": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
@@ -94,8 +94,7 @@ def main() -> int:
                 continue
 
             # удаляем все открытые ордера
-            account_id = share['account_id']
-            client.cancel_all_orders(account_id=account_id)
+            # client.cancel_all_orders(account_id=ACCID)
 
             # заполняем цены
             for i in range(share['number'] + 1):
@@ -116,7 +115,7 @@ def main() -> int:
 
         while True:
             try:
-                for response in client.orders_stream.trades_stream():
+                for response in client.orders_stream.trades_stream([ACCID]):
                     print(time.asctime(), response)
 
                     if not response.order_trades:
@@ -141,7 +140,6 @@ def create_orders(client, share):
     share_id = share['id']
     figi = share['figi']
     quantity = share['quantity']
-    account_id = share['account_id']
 
     prices = get_prices(share)
 
@@ -188,11 +186,11 @@ def create_orders(client, share):
         direction = OrderDirection.ORDER_DIRECTION_SELL if price > last_price else OrderDirection.ORDER_DIRECTION_BUY
         price_quotation = makequotation(price)
         try:
-            order = client.orders.post_order(account_id=account_id, figi=figi, quantity=quantity,
+            order = client.orders.post_order(account_id=ACCID, figi=figi, quantity=quantity,
                                              price=price_quotation, direction=direction,
                                              order_type=OrderType.ORDER_TYPE_LIMIT,
                                              order_id=str(time.time_ns()))
-            # print('post_order', account_id, figi, quantity, price_quotation, direction)
+            # print('post_order', ACCID, figi, quantity, price_quotation, direction)
             # order = type('obj', (object,), { 'order_id': str(time.time_ns()) })
 
             cursor.execute("INSERT INTO `order` (share_id, ticker, order_id, price, direction) VALUES (?, ?, ?, ?, ?)",
@@ -222,11 +220,10 @@ def handle_order(client, order_id):
     if not share:
         print("share not found")
         return
-    account_id = share['account_id']
     figi = share['figi']
     quantity = share['quantity']
 
-    order_state = client.orders.get_order_state(account_id=account_id, order_id=order_id)
+    order_state = client.orders.get_order_state(account_id=ACCID, order_id=order_id)
     if not order_state:
         print(time.asctime(), "not order_state: ", order)
         return
@@ -263,11 +260,11 @@ def handle_order(client, order_id):
         price_quotation = makequotation(price)
 
         try:
-            order = client.orders.post_order(account_id=account_id, figi=figi, quantity=quantity,
+            order = client.orders.post_order(account_id=ACCID, figi=figi, quantity=quantity,
                                              price=price_quotation, direction=direction,
                                              order_type=OrderType.ORDER_TYPE_LIMIT,
                                              order_id=str(time.time_ns()))
-            # print('post_order', account_id, figi, quantity, price_quotation, direction)
+            # print('post_order', ACCID, figi, quantity, price_quotation, direction)
             # order = type('obj', (object,), {'order_id': str(time.time_ns())})
 
             cursor.execute("UPDATE `order` SET order_id = ?, price = ?, direction = ? WHERE id = ?",

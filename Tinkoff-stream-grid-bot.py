@@ -150,7 +150,7 @@ def create_orders(client, share):
         if abs(price - last_price) < abs(price - skip_price):
             skip_price = price
 
-    # пробуем найти цену под sell
+    #пробуем найти цену под sell
     new_skip_price = cursor.execute(
         "SELECT MAX(price) FROM price P WHERE share_id = ? AND price < (SELECT MIN(price) FROM `order` WHERE direction = ? AND share_id = P.share_id)",
         (share_id, OrderDirection.ORDER_DIRECTION_SELL)).fetchone()[0]

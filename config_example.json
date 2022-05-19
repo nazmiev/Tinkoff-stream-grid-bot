@@ -1,0 +1,12 @@
+{
+  "token": "<YOUR_TOKEN>",
+  "account_id": "<YOUR_ACCID>",
+  "shares": {
+    "IRAO": {
+      "number": 10,
+      "price_step": 0.03,
+      "quantity": 1,
+      "start_price": 0
+    }
+  }
+}

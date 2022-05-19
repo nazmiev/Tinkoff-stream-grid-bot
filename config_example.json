@@ -2,9 +2,15 @@
   "token": "<YOUR_TOKEN>",
   "account_id": "<YOUR_ACCID>",
   "shares": {
-    "IRAO": {
-      "number": 10,
-      "price_step": 0.03,
+    "IRAO": { /*тикер акции*/
+      "number": 10, /*количество линий*/
+      "price_step": 0.03, /*шаг построения сетки, в примере это 3% */
+      "quantity": 1, /*количество бумаг в одном ордере*/
+      "start_price": 0 /*пока не трогайте эту настройку*/
+    },
+    "SBER": {
+      "number": 16,
+      "price_step": 0.02,
       "quantity": 1,
       "start_price": 0
     }

@@ -1,6 +1,7 @@
 import sqlite3
 import time
 import sys
+import json
 from tinkoff.invest import Client, RequestError
 from tinkoff.invest import OrderType, OrderDirection, Quotation, OrderExecutionReportStatus
 
@@ -8,25 +9,17 @@ from tinkoff.invest import OrderType, OrderDirection, Quotation, OrderExecutionR
 import os
 
 #Token import to variables
-if os.path.isfile('token.txt'):
-    with open(file='token.txt') as token_file:
-         TOKEN = token_file.readline().rstrip('\n')
-         ACCID = token_file.readline().rstrip('\n')
-else:
-    print ("No token.txt exists.")
-    exit(0)
+config_file = "config.json"
 
-#main file
-shares = {
-    "UWGN": {"number": 6, "price_step": 5 / 1000, "quantity": 1, "start_price": 0, "account_id": ACCID},
-    "SKLZ": {"number": 6, "price_step": 2 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
-    # "T": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
-    # "DSKY": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
-    # "FIXP": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
-    # "YNDX": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
-    # "MTSS": {"number": 6, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
-    # "TCS": {"number": 2, "price_step": 3 / 100, "quantity": 1, "start_price": 0, "account_id": ACCID},
-}
+if os.path.isfile(config_file):
+    with open(file=config_file) as config:
+        config = json.load(config)
+        TOKEN = config.get('token')
+        ACCID = config.get('account_id')
+        shares = config.get('shares')
+else:
+    print ("No " + config_file + " exists.")
+    exit(0)
 
 sqlite = sqlite3.connect('sqlite_brand_new_stream2.db')
 cursor = sqlite.cursor()
@@ -67,7 +60,7 @@ def main() -> int:
     cursor.execute(sql)
     sqlite.commit()
 
-    with Client(TOKEN) as client:
+    with Client(token=TOKEN, app_name="nazmiev.Tinkoff-stream-grid-bot") as client:
         for instrument in client.instruments.shares().instruments:
             if (instrument.ticker in shares):
                 share = shares[instrument.ticker]

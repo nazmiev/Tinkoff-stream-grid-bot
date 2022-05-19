@@ -10,14 +10,14 @@ echo "7 - Продолжение работы после паузы контей
 echo "8 - Остановка контейнера Docker в режиме демона"
 echo "0 - Выход"
 
-read action
+read -r action
 
 case $action in
 1)
 docker run --rm --name tbot -it -d -v $(pwd):/app tbot
 ;;
 2)
-docker run --rm -d --name tbot -it -v $(pwd):/app tbot
+docker run --rm --name tbot -it -v $(pwd):/app tbot
 ;;
 3)
 python3 tinkoff-stream-grid-bot.py

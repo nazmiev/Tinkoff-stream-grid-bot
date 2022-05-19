@@ -2,6 +2,7 @@ import sqlite3
 import time
 import sys
 import json
+import logging
 from tinkoff.invest import Client, RequestError
 from tinkoff.invest import OrderType, OrderDirection, Quotation, OrderExecutionReportStatus
 
@@ -23,6 +24,15 @@ else:
 
 sqlite = sqlite3.connect('sqlite_brand_new_stream2.db')
 cursor = sqlite.cursor()
+
+logger = open('bot_stat.log', 'a')
+
+
+def log(*args):
+    message = ' '.join(map(str, args))
+    print(message)
+    logger.write(message + "\n")
+    logger.flush()
 
 def makefloat(m) -> float:
     return float(format(m.units + m.nano / 10 ** 9, '.9f'))
@@ -236,6 +246,7 @@ def handle_order(client, order_id):
 
     if (order_state.execution_report_status == OrderExecutionReportStatus.EXECUTION_REPORT_STATUS_FILL):
         print(time.asctime(), " ORDER FILLED ", order_id, price)
+        log(time.asctime(), " ORDER FILLED ", order_id, price, order_state.direction)
 
         prices = get_prices(share)
 

@@ -2,3 +2,4 @@ token.txt
 config.json
 *.db
 .idea/
+*.log
